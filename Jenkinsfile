@@ -8,14 +8,14 @@ pipeline {
     stages {
         stage('Checkout do código') {
             steps {
-                echo '📦 Fazendo checkout do repositório...'
+                echo 'Fazendo checkout do repositório...'
                 checkout scm
             }
         }
 
         stage('Instalar Python') {
             steps {
-                echo '🐍 Instalando Python e pip...'
+                echo 'Instalando Python e pip...'
                 sh '''
                     apt-get update -y
                     apt-get install -y python3 python3-pip
@@ -27,21 +27,21 @@ pipeline {
 
         stage('Instalar dependências') {
             steps {
-                echo '📦 Instalando dependências do projeto...'
+                echo 'Instalando dependências do projeto...'
                 sh 'pip3 install --no-cache-dir -r requirements.txt'
             }
         }
 
         stage('Carregar variáveis do .env') {
             steps {
-                echo '⚙️ Carregando variáveis de ambiente do arquivo .env...'
+                echo 'Carregando variáveis de ambiente do arquivo .env...'
                 sh 'export $(grep -v "^#" .env | xargs)'
             }
         }
 
         stage('Executar script Python') {
             steps {
-                echo '🚀 Executando importação de planilhas...'
+                echo ' Executando importação de planilhas...'
                 sh 'python3 src/import_planilhas_mysql.py'
             }
         }
@@ -49,10 +49,10 @@ pipeline {
 
     post {
         success {
-            echo '✅ Importação concluída com sucesso!'
+            echo 'Importação concluída com sucesso!'
         }
         failure {
-            echo '❌ Erro durante a execução. Verifique os logs no console do Jenkins.'
+            echo 'Erro durante a execução. Verifique os logs no console do Jenkins.'
         }
     }
 }
