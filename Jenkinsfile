@@ -20,7 +20,7 @@ pipeline {
                 sh '''
                     python3 --version
                     pip3 --version
-                    pip3 install --no-cache-dir --break-system-packages -r requirements.txt
+                    pip3 install --no-cache-dir --default-timeout=100 --retries=5 -r requirements.txt
                 '''
             }
         }
