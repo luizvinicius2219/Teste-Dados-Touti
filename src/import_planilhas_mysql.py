@@ -46,7 +46,7 @@ def read_file_to_dfs(path):
             try:
                 dfs[sheet] = xls.parse(sheet)
             except Exception as e:
-                print(f"⚠️ Erro lendo {path} sheet {sheet}: {e}")
+                print(f"Erro lendo {path} sheet {sheet}: {e}")
         return dfs
 
     # --- CSV ---
@@ -68,12 +68,12 @@ def read_file_to_dfs(path):
             read_lines = len(df)
             skipped = total_lines - read_lines - 1  # -1 por causa do cabeçalho
             if skipped > 0:
-                print(f"⚠️ {skipped} linhas foram ignoradas por erro de formatação no CSV.")
+                print(f"{skipped} linhas foram ignoradas por erro de formatação no CSV.")
 
             return {'csv': df}
 
         except Exception as e:
-            print(f"❌ Erro lendo CSV {path}: {e}")
+            print(f"Erro lendo CSV {path}: {e}")
             return {}
 
     else:
@@ -83,18 +83,18 @@ def ensure_db_connection(engine):
     try:
         with engine.connect() as conn:
             conn.execute(text("SELECT 1"))
-        print("✅ Conexão com o banco MySQL bem-sucedida!")
+        print("Conexão com o banco MySQL bem-sucedida!")
         return True
     except SQLAlchemyError as e:
-        print("❌ Erro conectando ao banco:", e)
+        print("Erro conectando ao banco:", e)
         return False
 
 def write_df_to_table(engine, df: pd.DataFrame, table_name: str, if_exists='append', chunksize=5000):
     try:
         df.to_sql(name=table_name, con=engine, if_exists=if_exists, index=False, chunksize=chunksize, method='multi')
-        print(f"✅ Gravado {len(df)} linhas na tabela `{table_name}`")
+        print(f"Gravado {len(df)} linhas na tabela `{table_name}`")
     except Exception as e:
-        print(f"❌ Erro gravando tabela {table_name}: {e}")
+        print(f"Erro gravando tabela {table_name}: {e}")
 
 # ==========================
 # 3. Função principal
@@ -108,11 +108,11 @@ def main():
              if os.path.isfile(os.path.join(FOLDER, f)) and os.path.splitext(f)[1].lower() in ('.xlsx','.xls','.csv')]
 
     if not files:
-        print("⚠️ Nenhum arquivo encontrado em:", FOLDER)
+        print("Nenhum arquivo encontrado em:", FOLDER)
         return
 
     for file_path in files:
-        print(f"\n📄 Processando: {file_path}")
+        print(f"\n Processando: {file_path}")
         dfs = read_file_to_dfs(file_path)
         base_filename = os.path.splitext(os.path.basename(file_path))[0]
 
@@ -135,7 +135,7 @@ def main():
                 write_df_to_table(engine, df, table_name)
 
     engine.dispose()
-    print("\n✅ Fim do processamento.")
+    print("\n Fim do processamento.")
 
 if __name__ == "__main__":
     main()
