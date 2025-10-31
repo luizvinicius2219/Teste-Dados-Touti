@@ -20,7 +20,7 @@ pipeline {
                 sh '''
                     python3 --version
                     pip3 --version
-                    pip3 install --no-cache-dir -r requirements.txt
+                    sh 'pip3 install --no-cache-dir --break-system-packages -r requirements.txt'
                 '''
             }
         }
