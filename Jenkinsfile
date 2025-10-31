@@ -13,36 +13,26 @@ pipeline {
             }
         }
 
-        stage('Instalar Python') {
-            steps {
-                echo 'Instalando Python e pip...'
-                sh '''
-                    apt-get update -y
-                    apt-get install -y python3 python3-pip
-                    python3 --version
-                    pip3 --version
-                '''
-            }
-        }
-
         stage('Instalar dependências') {
             steps {
                 echo 'Instalando dependências do projeto...'
-                sh 'pip3 install --no-cache-dir -r requirements.txt'
-            }
-        }
-
-        stage('Carregar variáveis do .env') {
-            steps {
-                echo 'Carregando variáveis de ambiente do arquivo .env...'
-                sh 'export $(grep -v "^#" .env | xargs)'
+                // roda pip3 e python no mesmo shell
+                sh '''
+                    python3 --version
+                    pip3 --version
+                    pip3 install --no-cache-dir -r requirements.txt
+                '''
             }
         }
 
         stage('Executar script Python') {
             steps {
-                echo ' Executando importação de planilhas...'
-                sh 'python3 src/import_planilhas_mysql.py'
+                echo 'Executando importação de planilhas...'
+                // carregar variáveis do .env e rodar Python no mesmo shell
+                sh '''
+                    export $(grep -v "^#" .env | xargs)
+                    python3 src/import_planilhas_mysql.py
+                '''
             }
         }
     }
