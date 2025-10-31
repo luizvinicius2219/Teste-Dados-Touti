@@ -16,11 +16,20 @@ pipeline {
         stage('Instalar dependências') {
             steps {
                 echo 'Instalando dependências do projeto...'
-                // roda pip3 e python no mesmo shell
                 sh '''
+                    set -e
                     python3 --version
                     pip3 --version
-                    pip3 install --no-cache-dir --default-timeout=100 --retries=5 -r requirements.txt
+
+                    # Cria ambiente virtual (venv) isolado
+                    python3 -m venv venv
+                    . venv/bin/activate
+
+                    # Atualiza pip dentro do venv
+                    pip install --upgrade pip
+
+                    # Instala dependências do projeto
+                    pip install --no-cache-dir --default-timeout=100 --retries=5 -r requirements.txt
                 '''
             }
         }
@@ -28,10 +37,14 @@ pipeline {
         stage('Executar script Python') {
             steps {
                 echo 'Executando importação de planilhas...'
-                // carregar variáveis do .env e rodar Python no mesmo shell
                 sh '''
+                    set -e
+                    # Carrega variáveis do .env
                     export $(grep -v "^#" .env | xargs)
-                    python3 src/import_planilhas_mysql.py
+
+                    # Ativa o ambiente virtual e executa o script
+                    . venv/bin/activate
+                    python src/import_planilhas_mysql.py
                 '''
             }
         }
