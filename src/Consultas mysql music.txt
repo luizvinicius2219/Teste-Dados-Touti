@@ -1,0 +1,49 @@
+SELECT 
+    `Top Genre`, 
+    SUM(`Streams (Thousand)`) AS Total_Streams_Thousand
+FROM  music_test_csv
+GROUP BY `Top Genre` ORDER BY  Total_Streams_Thousand DESC;
+
+
+
+SELECT `Top Genre`, AVG(`Streams (Thousand)`) AS Media_Streams_Thousand
+FROM  music_test_csv
+GROUP BY `Top Genre`
+ORDER BY Media_Streams_Thousand DESC;
+
+
+
+SELECT Artist, Year, SUM(`Streams (Thousand)`) AS Total_Streams_Thousand
+FROM music_test_csv
+GROUP BY Artist, Year
+ORDER BY Artist ASC, Year DESC, Total_Streams_Thousand DESC;
+
+SELECT
+    index,  -- Tentando 'index' em minúsculas
+    MD5(Artist) AS Artist_Anonimizado,
+    MD5(`Top Genre`) AS Genre_Anonimizado,
+    Year,
+    `Streams (Thousand)`
+FROM
+    music_test_csv;
+
+
+
+
+SELECT
+    ID,
+    MD5(Artist) AS Artist_Anonimizado,
+    MD5(`Top Genre`) AS Genre_Anonimizado,
+    Year,
+    `Streams (Thousand)`,
+    Energy,
+    Danceability,
+    `Loudness (dB)`,
+    Liveness,
+    Valence,
+    `Length (Duration)`,
+    Acousticness,
+    Speechiness,
+    `Popularity;;`
+FROM
+    music_test_csv;
